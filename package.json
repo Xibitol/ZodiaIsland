@@ -1,0 +1,15 @@
+{
+  "name": "zodia-island",
+  "version": "1.0.0",
+  "description": "This is an advanced role-playing bot for the Zodia Island server.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "author": "Xibitol",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.5.1"
+  }
+}

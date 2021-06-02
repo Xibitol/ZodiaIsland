@@ -4,7 +4,7 @@ import {Account} from "./classes/account.js";
 
 
 const CLIENT = new DISCORD.Client();
-process.env.token = "Nzg1MjA0NjY5NTEyODEwNTI3.X80c1Q.-l0qsvNqMb7sUH7VVtG81n4vZkc";
+process.env.token = /*Token*/;
 
 CLIENT.on("ready", function(){
     console.log("Bot launched");

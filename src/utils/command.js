@@ -1,51 +1,106 @@
-export class CommandSystem{
-    constructor(client){
-        this.prefix = "?";
-        this.commands = new Array();
+import {MessageEmbed} from "discord.js";
 
-        client.on("message", function(message){
-            if(!message.content.startsWith(this.prefix)) return;
-            let messageArray = message.content.split(" ");
-            messageArray[0].replace("?", "");
+export class CommandManager{
+    static COMMANDS = [];
 
-            this.commands.forEach(function(command){
-                if(messageArray[0] != command.name) return
+    constructor(client, prefix){
+        client.on("message", function(msg){
+            if(!msg.content.startsWith(prefix)) return;
+            let msgArray = msg.content.split(" ");
+            msgArray[0] = msgArray[0].substring(1);
 
-                command.underCommand.forEach(function(underCommand){
-                    if(messageArray[0] != underCommand.name) return;
+            CommandManager.COMMANDS.forEach(function(cmd){
+                if(msgArray[0] != cmd.name) return;
 
-                    
-                }).then(function(){
+                for(const [index, underCmd] of cmd.getUnderCommands().entries()) {
+                    if(msgArray[1] != underCmd.name) {
+                        if(index == cmd.getUnderCommands().length-1){
+                            msgArray.shift();
 
-                })
+                            if(!cmd.execute(msg, msgArray)){
+                                let embed = new MessageEmbed();
+                                embed.setTitle("Help - " + cmd.name);
+                                embed.setColor([80, 80, 255]);
+                                embed.setDescription(cmd.description);
+                                
+                                let string = "?" + cmd.name;
+                                cmd.getArguments().forEach(function(element){
+                                    string += " <" + element + ">";
+                                });
+                                embed.addField("Syntaxe", string)
+
+                                embed.setFooter("Zodia Island");
+
+                                msg.channel.send(embed);
+                            }
+                        }
+
+                        continue;
+                    }
+
+                    msgArray.shift();
+                    msgArray.shift();
+
+                    if(!underCmd.execute(msg, msgArray)){
+                        let embed = new MessageEmbed();
+                        embed.setTitle("Help - " + cmd.name + " " + underCmd.name);
+                        embed.setColor([80, 80, 255]);
+                        embed.setDescription(underCmd.description);
+                        
+                        let string = "?" + cmd.name + " " + underCmd.name;
+                        underCmd.getArguments().forEach(function(element){
+                            string += " <" + element + ">";
+                        });
+                        embed.addField("Syntaxe", string)
+
+                        embed.setFooter("Zodia Island");
+
+                        msg.channel.send(embed);
+                    }
+
+                    break;
+                }
             });
         });
     }
-    addCommand(command){
-        this.commands.push(command);
+    static addCommand(command){
+        this.COMMANDS.push(command);
     }
 }
 export class Command{
-    constructor(name){
-        this.name = name
-        this.arguments = new Array();
-        this.underCommand = new Array();
+    constructor(name, description, execute){
+        this.name = name;
+        this.description = description;
+        this.arguments = [];
+        this.underCommands = [];
+        this.execute = execute;
     }
 
-    addArgument(name, required){
-        this.arguments.push({name, required});
+    addArgument(name){
+        this.arguments.push(name);
     }
     addUnderCommand(underCommand){
-        this.underCommand.push(underCommand);
-    }
-}
-export class UnderCommand{
-    constructor(name){
-        this.name = name
-        this.arguments = new Array();
+        this.underCommands.push(underCommand);
     }
 
-    addArgument(name, required){
-        this.arguments.push({name, required});
+    getName(){ return this.name; }
+    getDescription(){ return this.description; }
+    getArguments(){ return this.arguments; }
+    getUnderCommands(){ return this.underCommands; }
+}
+export class UnderCommand{
+    constructor(name, description, execute){
+        this.name = name
+        this.description = description;
+        this.arguments = [];
+        this.execute = execute;
     }
+
+    addArgument(name){
+        this.arguments.push(name);
+    }
+
+    getName(){ return this.name; }
+    getDescription(){ return this.description; }
+    getArguments(){ return this.arguments; }
 }

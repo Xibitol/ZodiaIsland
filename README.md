@@ -1,7 +1,7 @@
 ![Zodia Island logo](https://github.com/Xibitol/ZodiaIsland/blob/master/Logo/ZodiaIsland_Large_logo.png?raw=true)
 
 # Zodia Island
-_Project abandonned_
+_Project abandonned_  
 This is the official discord bot of Zodia Island.
 
 ## Commands

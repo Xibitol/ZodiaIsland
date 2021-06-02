@@ -1,4 +1,4 @@
-![Zodia Island logo](https://github.com/Xibitol/ZodiaIsland/blob/master/Logo/ZodiaIsland_Large_logo.png?raw=true)
+![Zodia Island logo](https://github.com/Xibitol/ZodiaIsland/blob/master/Content/Logo/ZodiaIsland_Large_logo.png?raw=true)
 
 # Zodia Island
 _Project abandonned_  
